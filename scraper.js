@@ -1,4 +1,9 @@
 
+function expand_tasks(){
+    for (var i in Capsule.capsules) {
+                Capsule.capsules[i].expand();
+    }
+}
 
 function task_details(tab){
     var first_name = $(tab).find(".capsulelink")[0].text;
@@ -12,7 +17,12 @@ function task_details(tab){
     var price = $(details[3]).text();
     var available_HITs = $(details[4]).text();
     var id = first_url.substring(first_url.indexOf("=") + 1);
-  
+
+    // expanded fields
+    var capsule0 = $(tab).find("#capsule0target").find(".capsule_field_text");
+    var desc = $(capsule0[0]).html();
+    var keywords = $.map($(capsule0[1]).children(), function(e) {return e.text});
+    
     return {
         "task_name":first_name,
         "task_url":first_url,
@@ -22,19 +32,17 @@ function task_details(tab){
         "time_allot":time_allotted,
         "price":price,
         "avail_HITs":available_HITs,
-        "id":id
+        "id":id,
+        "desc":desc,
+        "keywords":keywords
     };
           
 }
 
+// the script
+expand_tasks();
 var master_table = $("table")[6];
 var tasks = $(master_table).children().children();
-var task_tables = $();
-$.each(tasks, function(i,x) { 
-    task_tables = task_tables.add($(tasks[i]).children().children());
-});
-
-var tasks_json = $();
-$.each(task_tables, function(i,x) {
-    tasks_json = tasks_json.add(task_details(task_tables[i]));
-});
+var task_tables = $.map(tasks, function(e) {
+                    return $(e).children().children()[0]});
+var tasks_json = $.map(task_tables, function(e) {return task_details(e)});
