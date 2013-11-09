@@ -16,7 +16,8 @@ function task_details(tab){
     var time_allotted = $(details[2]).text().trim();
     var price = $(details[3]).text();
     var available_HITs = $(details[4]).text();
-    var id = first_url.substring(first_url.indexOf("=") + 1);
+    var group_id = first_url.substring(first_url.indexOf("=") + 1);
+    var requester_id = requester_url.substring(requester_url.indexOf("requesterId=") + 12);
 
     // expanded fields
     var capsule = $(tab).find(".capsuletarget").find(".capsule_field_text");
@@ -28,26 +29,29 @@ function task_details(tab){
 
     
     return {
-        "task_name":first_name,
-        "task_url":first_url,
-        "requester_name":requester_name,
-        "requester_url":requester_url,
-        "exp_date":expiration_date,
+        "group_id":group_id,
+        "requester_id":requester_id,
+        "available_hits":available_HITs,
+        "reward":price,
+        "name":first_name,
+        "description":desc,
         "time_allot":time_allotted,
-        "price":price,
-        "avail_HITs":available_HITs,
-        "id":id,
-        "desc":desc,
+        "expiration_date":expiration_date,
         "keywords":keywords,
+        "requester_name":requester_name,
+        "task_url":first_url,
         "qualified":qual 
     };
           
 }
 
 // the script
-expand_tasks();
-var master_table = $("table")[6];
-var tasks = $(master_table).children().children();
-var task_tables = $.map(tasks, function(e) {
-                    return $(e).children().children()[0]});
-var tasks_json = $.map(task_tables, function(e) {return task_details(e)});
+function make_json(){
+    expand_tasks();
+    var master_table = $("table")[6];
+    var tasks = $(master_table).children().children();
+    var task_tables = $.map(tasks, function(e) {
+                        return $(e).children().children()[0]});
+    var tasks_json = $.map(task_tables, function(e) {return task_details(e)});
+    return tasks_json
+}
