@@ -1,7 +1,7 @@
 
 function expand_tasks(){
     for (var i in Capsule.capsules) {
-                Capsule.capsules[i].expand();
+            Capsule.capsules[i].expand();
     }
 }
 
@@ -19,9 +19,13 @@ function task_details(tab){
     var id = first_url.substring(first_url.indexOf("=") + 1);
 
     // expanded fields
-    var capsule0 = $(tab).find("#capsule0target").find(".capsule_field_text");
-    var desc = $(capsule0[0]).html();
-    var keywords = $.map($(capsule0[1]).children(), function(e) {return e.text});
+    var capsule = $(tab).find(".capsuletarget").find(".capsule_field_text");
+    var desc = $(capsule[0]).html();
+    var keywords = $.map($(capsule[1]).children(), function(e) {return e.text});
+
+    // check qualification
+    var qual = $($(tab).find(".capsulelink")[1]).children().filter(":last")[0].href != "";
+
     
     return {
         "task_name":first_name,
@@ -34,7 +38,8 @@ function task_details(tab){
         "avail_HITs":available_HITs,
         "id":id,
         "desc":desc,
-        "keywords":keywords
+        "keywords":keywords,
+        "qualified":qual 
     };
           
 }
